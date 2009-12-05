@@ -51,6 +51,20 @@
     </target>
 
     <target name="clean">
-        <delete dir="${build.dir}" />
+      <delete dir="${build.dir}" />
+      <delete dir="bin" />
+    </target>
+    
+    <target name="dist" depends="clean, prepare">
+      <zip destfile="${build.dir}/birthday-greetings-kata-code.zip">
+        <zipfileset dir="src" prefix="src" />
+        <zipfileset dir="lib" prefix="lib" />
+        <zipfileset dir="." includes="README" />
+        <zipfileset dir="." includes="build.xml" />
+        <zipfileset dir="." includes="employee_data.txt" />
+        <zipfileset dir="." includes=".classpath" />
+        <zipfileset dir="." includes=".project" />
+      </zip>
+      
     </target>
 </project>
