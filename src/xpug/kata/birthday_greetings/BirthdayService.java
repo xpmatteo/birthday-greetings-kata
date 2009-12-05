@@ -37,9 +37,8 @@ public class BirthdayService {
 		}
 	}
 
-	private void sendMessage(String smtpHost, int smtpPort, String sender,
-			String subject, String body, String recipient)
-			throws AddressException, MessagingException {
+	// made protected for testing :-(
+	protected void sendMessage(String smtpHost, int smtpPort, String sender, String subject, String body, String recipient)			throws AddressException, MessagingException {
 		System.out.println("Email sent to: " + asList(sender, subject, body, recipient));
 
 		// Create a mail session
