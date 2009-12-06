@@ -17,28 +17,23 @@ import javax.mail.internet.MimeMessage;
 
 public class BirthdayService {
 
-	public void sendGreetings(String fileName, OurDate ourDate,
-			String smtpHost, int smtpPort) throws IOException, ParseException, AddressException, MessagingException {
+	public void sendGreetings(String fileName, OurDate ourDate, String smtpHost, int smtpPort) throws IOException, ParseException, AddressException, MessagingException {
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		String str = "";
 		str = in.readLine(); // skip header
 		while ((str = in.readLine()) != null) {
 			String[] employeeData = str.split(", ");
-			Employee employee = new Employee(employeeData[1], employeeData[0],
-					employeeData[2], employeeData[3]);
+			Employee employee = new Employee(employeeData[1], employeeData[0], employeeData[2], employeeData[3]);
 			if (employee.isBirthday(ourDate)) {
 				String receiver = employee.getEmail();
-				String body = "Happy Birthday, dear %NAME%!".replace("%NAME%",
-						employee.getFirstName());
+				String body = "Happy Birthday, dear %NAME%!".replace("%NAME%", employee.getFirstName());
 				String subject = "Happy Birthday!";
-				sendMessage(smtpHost, smtpPort, "sender@here.com", subject,
-						body, receiver);
+				sendMessage(smtpHost, smtpPort, "sender@here.com", subject, body, receiver);
 			}
 		}
 	}
 
-	// made protected for testing :-(
-	protected void sendMessage(String smtpHost, int smtpPort, String sender, String subject, String body, String recipient)			throws AddressException, MessagingException {
+	private void sendMessage(String smtpHost, int smtpPort, String sender, String subject, String body, String recipient) throws AddressException, MessagingException {
 		System.out.println("Email sent to: " + asList(sender, subject, body, recipient));
 
 		// Create a mail session
@@ -50,20 +45,23 @@ public class BirthdayService {
 		// Construct the message
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(sender));
-		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(
-				recipient));
+		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 		msg.setSubject(subject);
 		msg.setText(body);
 
 		// Send the message
+		sendMessage(msg);
+	}
+
+	// made protected for testing :-(
+	protected void sendMessage(Message msg) throws MessagingException {
 		Transport.send(msg);
 	}
 
 	public static void main(String[] args) {
 		BirthdayService service = new BirthdayService();
 		try {
-			service.sendGreetings("employee_data.txt",
-					new OurDate("2008/10/08"), "localhost", 25);
+			service.sendGreetings("employee_data.txt", new OurDate("2008/10/08"), "localhost", 25);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

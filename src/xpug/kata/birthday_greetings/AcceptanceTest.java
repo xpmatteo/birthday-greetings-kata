@@ -1,15 +1,13 @@
 package xpug.kata.birthday_greetings;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 
+import org.junit.Before;
 import org.junit.Test;
-
-import com.dumbster.smtp.SmtpMessage;
 
 import static org.junit.Assert.*;
 
@@ -17,52 +15,32 @@ import static org.junit.Assert.*;
 public class AcceptanceTest {
 
 	private static final int NONSTANDARD_PORT = 3003;
-	private Iterator<SmtpMessage> emailIterator;
+	private List<Message> messagesSent;
+	
+	@Before
+	public void setUp() throws Exception {
+		messagesSent = new ArrayList<Message>();
+	}
 	
 	@Test
 	public void baseScenario() throws Exception {
 		startBirthdayServiceFor("employee_data.txt", "2008/10/08");
 		
-		expectEmailWithSubject_andBody_sentTo("Happy Birthday!", "Happy Birthday, dear John!", "john.doe@foobar.com");
-	}
-
-	private void expectEmailWithSubject_andBody_sentTo(String subject, String body, String recipient) {
-		SmtpMessage message = emailIterator.next();
-		assertNotNull("message not received", message);
-		assertEquals(body, message.getBody());
-		assertEquals(subject, message.getHeaderValue("Subject"));
-		assertEquals(recipient, message.getHeaderValue("To"));		
+		assertEquals("message not sent?", 1, messagesSent.size());
+		Message message = messagesSent.get(0);
+		assertEquals("Happy Birthday, dear John!", message.getContent());
+		assertEquals("Happy Birthday!", message.getSubject());
+		assertEquals(1, message.getAllRecipients().length);		
+		assertEquals("john.doe@foobar.com", message.getAllRecipients()[0].toString());		
 	}
 
 	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
-		final List<SmtpMessage> messages = new ArrayList<SmtpMessage>();
-		BirthdayService service = new BirthdayService() {
+		BirthdayService service = new BirthdayService() {			
 			@Override
-			
-			protected void sendMessage(String smtpHost, int smtpPort, String sender, final String subject, final String body, final String recipient) throws AddressException, MessagingException {
-				SmtpMessage message = new SmtpMessage() {
-
-					@Override
-					public String getBody() {
-						return body;
-					}
-
-					@Override
-					public String getHeaderValue(String header) {
-						if ("subject".equalsIgnoreCase(header)) {
-							return subject;
-						}
-						if ("to".equalsIgnoreCase(header)) {
-							return recipient;
-						}
-						return null;
-					}
-					
-				};
-				messages.add(message);
+			protected void sendMessage(Message msg) throws MessagingException {
+				messagesSent.add(msg);
 			}
 		};
 		service.sendGreetings(employeeFileName, new OurDate(date), "localhost", NONSTANDARD_PORT);
-		emailIterator = messages.iterator();
 	}
 }
