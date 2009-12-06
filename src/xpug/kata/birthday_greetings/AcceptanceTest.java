@@ -14,17 +14,26 @@ import static org.junit.Assert.*;
 
 public class AcceptanceTest {
 
-	private static final int NONSTANDARD_PORT = 3003;
+	private static final int SMTP_PORT = 25;
 	private List<Message> messagesSent;
+	private BirthdayService service;
 	
 	@Before
 	public void setUp() throws Exception {
 		messagesSent = new ArrayList<Message>();
+
+		service = new BirthdayService() {			
+			@Override
+			protected void sendMessage(Message msg) throws MessagingException {
+				messagesSent.add(msg);
+			}
+		};
 	}
 	
 	@Test
 	public void baseScenario() throws Exception {
-		startBirthdayServiceFor("employee_data.txt", "2008/10/08");
+		
+		service.sendGreetings("employee_data.txt", new OurDate("2008/10/08"), "localhost", SMTP_PORT);
 		
 		assertEquals("message not sent?", 1, messagesSent.size());
 		Message message = messagesSent.get(0);
@@ -33,14 +42,11 @@ public class AcceptanceTest {
 		assertEquals(1, message.getAllRecipients().length);		
 		assertEquals("john.doe@foobar.com", message.getAllRecipients()[0].toString());		
 	}
-
-	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
-		BirthdayService service = new BirthdayService() {			
-			@Override
-			protected void sendMessage(Message msg) throws MessagingException {
-				messagesSent.add(msg);
-			}
-		};
-		service.sendGreetings(employeeFileName, new OurDate(date), "localhost", NONSTANDARD_PORT);
+	
+	@Test
+	public void willNotSendEmailsWhenNobodysBirthday() throws Exception {		
+		service.sendGreetings("employee_data.txt", new OurDate("2008/01/01"), "localhost", SMTP_PORT);
+		
+		assertEquals("what? messages?", 0, messagesSent.size());
 	}
 }

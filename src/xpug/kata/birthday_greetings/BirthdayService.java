@@ -25,17 +25,15 @@ public class BirthdayService {
 			String[] employeeData = str.split(", ");
 			Employee employee = new Employee(employeeData[1], employeeData[0], employeeData[2], employeeData[3]);
 			if (employee.isBirthday(ourDate)) {
-				String receiver = employee.getEmail();
+				String recipient = employee.getEmail();
 				String body = "Happy Birthday, dear %NAME%!".replace("%NAME%", employee.getFirstName());
 				String subject = "Happy Birthday!";
-				sendMessage(smtpHost, smtpPort, "sender@here.com", subject, body, receiver);
+				sendMessage(smtpHost, smtpPort, "sender@here.com", subject, body, recipient);
 			}
 		}
 	}
 
 	private void sendMessage(String smtpHost, int smtpPort, String sender, String subject, String body, String recipient) throws AddressException, MessagingException {
-		System.out.println("Email sent to: " + asList(sender, subject, body, recipient));
-
 		// Create a mail session
 		java.util.Properties props = new java.util.Properties();
 		props.put("mail.smtp.host", smtpHost);
