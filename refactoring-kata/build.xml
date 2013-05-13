@@ -2,13 +2,15 @@
 <project name="birthday-greetings-kata" default="test" basedir=".">
 
     <property name="build.dir"      location="target" />
-    <property name="build.prod.dir" location="${build.dir}/prod"/>
-    <property name="build.test.dir" location="${build.dir}/test"/>
-    <property name="src.dir"        location="src"/>
-    <property name="lib.dir"        location="lib" />
-    <property name="templates.dir"  location="views" />
-    <property name="test.dir"       location="src"/>
-    <property name="test.lib.dir"   location="lib/test" />
+    <property name="build.prod.dir" location="${build.dir}/classes"/>
+    <property name="build.test.dir" location="${build.dir}/test-classes"/>
+    <property name="src.dir"   		location="src"/>
+    <property name="src.java.dir"   location="${src.dir}/main/java"/>
+    <property name="lib.dir"        location="${src.dir}/lib" />
+    <property name="src.doc.dir"  	location="../doc" />
+    <property name="src.test.dir"   location="${src.dir}/test/java"/>
+	<property name="src.test.resources.dir"   location="${src.dir}/test/resources"/>
+    <property name="test.lib.dir"   location="${src.dir}/lib/test" />
 
     <path id="project.classpath">
         <pathelement location="${build.prod.dir}" />
@@ -25,14 +27,20 @@
 
     <target name="compile" depends="prepare">
         <javac source="1.5" target="1.5" destdir="${build.prod.dir}" debug="true" encoding="utf-8">
-            <src path="${src.dir}" />
+            <src path="${src.java.dir}" />
             <classpath refid="project.classpath" />
         </javac>
     </target>
 
-    <target name="compile-tests" depends="compile">
+	<target name="process-test-resources">
+		<copy todir="${build.test.dir}">
+			<fileset dir="${src.test.resources.dir}"/>
+		</copy>
+    </target>
+	
+    <target name="compile-tests" depends="compile,process-test-resources">
         <javac source="1.5" target="1.5" destdir="${build.test.dir}" encoding="utf-8">
-            <src path="${test.dir}" />
+            <src path="${src.test.dir}" />
             <classpath refid="project.classpath" />
         </javac>
     </target>
@@ -41,8 +49,8 @@
         <junit haltonfailure="true" haltonerror="true"
       outputtoformatters="yes" fork="yes" forkmode="perBatch" maxmemory="256m" dir="${basedir}">
             <classpath refid="project.classpath" />
-            <classpath location="${src.dir}" />
-            <classpath location="${test.dir}" />
+            <classpath location="${src.java.dir}" />
+            <classpath location="${src.test.dir}" />
             <formatter type="brief" usefile="no" />
             <batchtest>
                 <fileset dir="${build.test.dir}" includes="**/*Test.class" />
@@ -57,11 +65,11 @@
     
     <target name="dist" depends="clean, prepare">
       <zip destfile="${build.dir}/birthday-greetings-kata-code.zip">
-        <zipfileset dir="src" prefix="src" />
-        <zipfileset dir="lib" prefix="lib" />
-        <zipfileset dir="." includes="README" />
+        <zipfileset dir="${src.dir}" prefix="src" />
+		<zipfileset dir="${src.doc.dir}" prefix="doc" />
+        <zipfileset dir=".." includes="README" />
         <zipfileset dir="." includes="build.xml" />
-        <zipfileset dir="." includes="employee_data.txt" />
+        <zipfileset dir="." includes="pom.xml" />
         <zipfileset dir="." includes=".classpath" />
         <zipfileset dir="." includes=".project" />
       </zip>
