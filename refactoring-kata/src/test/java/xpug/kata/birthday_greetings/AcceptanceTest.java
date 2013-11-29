@@ -29,7 +29,7 @@ public class AcceptanceTest {
 	}
 	
 	@Test
-	public void baseScenario() throws Exception {
+	public void sendGreetings() throws Exception {
 		startBirthdayServiceFor("src/test/resources/employee_data.txt", "2008/10/08");
 		
 		expectNumberOfEmailSentIs(1);
