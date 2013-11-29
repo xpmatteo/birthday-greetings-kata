@@ -1,52 +1,56 @@
 package xpug.kata.birthday_greetings;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.*;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import java.util.Iterator;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import com.dumbster.smtp.SimpleSmtpServer;
+import com.dumbster.smtp.SmtpMessage;
 
 
 public class AcceptanceTest {
 
-	private static final int SMTP_PORT = 25;
-	private List<Message> messagesSent;
-	private BirthdayService service;
-	
+	private static final int NONSTANDARD_PORT = 3003;
+	private SimpleSmtpServer server;
+	private Iterator<SmtpMessage> emailIterator;
+
 	@Before
 	public void setUp() throws Exception {
-		messagesSent = new ArrayList<Message>();
+		server = SimpleSmtpServer.start(NONSTANDARD_PORT);
+	}
+	
+	@After
+	public void tearDown() {
+		server.stop();
+	}
+	
+	@Test
+	public void baseScenario() throws Exception {
+		startBirthdayServiceFor("src/test/resources/employee_data.txt", "2008/10/08");
+		
+		expectNumberOfEmailSentIs(1);
+		expectEmailWithSubject_andBody_sentTo("Happy Birthday!", "Happy Birthday, dear John!", "john.doe@foobar.com");
+	}
 
-		service = new BirthdayService() {			
-			@Override
-			protected void sendMessage(Message msg) throws MessagingException {
-				messagesSent.add(msg);
-			}
-		};
+	private void expectEmailWithSubject_andBody_sentTo(String subject, String body, String recipient) {
+		SmtpMessage message = emailIterator.next();
+		assertEquals(body, message.getBody());
+		assertEquals(subject, message.getHeaderValue("Subject"));
+		assertEquals(recipient, message.getHeaderValue("To"));		
 	}
-	
-	@Test
-	public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
-		
-		service.sendGreetings("src/test/resources/employee_data.txt", new OurDate("2008/10/08"), "localhost", SMTP_PORT);
-		
-		assertEquals("message not sent?", 1, messagesSent.size());
-		Message message = messagesSent.get(0);
-		assertEquals("Happy Birthday, dear John!", message.getContent());
-		assertEquals("Happy Birthday!", message.getSubject());
-		assertEquals(1, message.getAllRecipients().length);		
-		assertEquals("john.doe@foobar.com", message.getAllRecipients()[0].toString());		
+
+	private void expectNumberOfEmailSentIs(int expected) {
+		assertEquals(expected, server.getReceivedEmailSize());
 	}
-	
-	@Test
-	public void willNotSendEmailsWhenNobodysBirthday() throws Exception {		
-		service.sendGreetings("src/test/resources/employee_data.txt", new OurDate("2008/01/01"), "localhost", SMTP_PORT);
-		
-		assertEquals("what? messages?", 0, messagesSent.size());
+
+	@SuppressWarnings("unchecked")
+	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
+		BirthdayService service = new BirthdayService();
+		service.sendGreetings(employeeFileName, new OurDate(date), "localhost", NONSTANDARD_PORT);
+		emailIterator = server.getReceivedEmail();
 	}
 }

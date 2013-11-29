@@ -38,7 +38,7 @@ public class BirthdayService {
 		java.util.Properties props = new java.util.Properties();
 		props.put("mail.smtp.host", smtpHost);
 		props.put("mail.smtp.port", "" + smtpPort);
-		Session session = Session.getDefaultInstance(props, null);
+		Session session = Session.getInstance(props, null);
 
 		// Construct the message
 		Message msg = new MimeMessage(session);
