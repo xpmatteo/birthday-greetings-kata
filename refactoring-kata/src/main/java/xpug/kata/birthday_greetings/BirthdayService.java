@@ -1,7 +1,5 @@
 package xpug.kata.birthday_greetings;
 
-import static java.util.Arrays.asList;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,14 +15,14 @@ import javax.mail.internet.MimeMessage;
 
 public class BirthdayService {
 
-	public void sendGreetings(String fileName, OurDate ourDate, String smtpHost, int smtpPort) throws IOException, ParseException, AddressException, MessagingException {
+	public void sendGreetings(String fileName, XDate xDate, String smtpHost, int smtpPort) throws IOException, ParseException, AddressException, MessagingException {
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		String str = "";
 		str = in.readLine(); // skip header
 		while ((str = in.readLine()) != null) {
 			String[] employeeData = str.split(", ");
 			Employee employee = new Employee(employeeData[1], employeeData[0], employeeData[2], employeeData[3]);
-			if (employee.isBirthday(ourDate)) {
+			if (employee.isBirthday(xDate)) {
 				String recipient = employee.getEmail();
 				String body = "Happy Birthday, dear %NAME%".replace("%NAME%", employee.getFirstName());
 				String subject = "Happy Birthday!";
@@ -54,14 +52,5 @@ public class BirthdayService {
 	// made protected for testing :-(
 	protected void sendMessage(Message msg) throws MessagingException {
 		Transport.send(msg);
-	}
-
-	public static void main(String[] args) {
-		BirthdayService service = new BirthdayService();
-		try {
-			service.sendGreetings("employee_data.txt", new OurDate("2008/10/08"), "localhost", 25);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

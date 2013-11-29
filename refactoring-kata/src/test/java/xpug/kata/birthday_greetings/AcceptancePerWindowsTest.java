@@ -33,7 +33,7 @@ public class AcceptancePerWindowsTest {
 	@Test
 	public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
 		
-		service.sendGreetings("src/test/resources/employee_data.txt", new OurDate("2008/10/08"), "localhost", SMTP_PORT);
+		service.sendGreetings("src/test/resources/employee_data.txt", new XDate("2008/10/08"), "localhost", SMTP_PORT);
 		
 		assertEquals("message not sent?", 1, messagesSent.size());
 		Message message = messagesSent.get(0);
@@ -45,7 +45,7 @@ public class AcceptancePerWindowsTest {
 	
 	@Test
 	public void willNotSendEmailsWhenNobodysBirthday() throws Exception {		
-		service.sendGreetings("src/test/resources/employee_data.txt", new OurDate("2008/01/01"), "localhost", SMTP_PORT);
+		service.sendGreetings("src/test/resources/employee_data.txt", new XDate("2008/01/01"), "localhost", SMTP_PORT);
 		
 		assertEquals("what? messages?", 0, messagesSent.size());
 	}

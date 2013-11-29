@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class OurDate {
+public class XDate {
 
 	private Date date;
 
-	public OurDate(String yyyyMMdd) throws ParseException {
+	public XDate(String yyyyMMdd) throws ParseException {
 		date = new SimpleDateFormat("yyyy/MM/dd").parse(yyyyMMdd);
 	}
 	
@@ -21,7 +21,7 @@ public class OurDate {
 		return 1 + getPartOfDate(GregorianCalendar.MONTH);
 	}
 
-	public boolean isSameDay(OurDate anotherDate) {
+	public boolean isSameDay(XDate anotherDate) {
 		return anotherDate.getDay() == this.getDay() && anotherDate.getMonth() == this.getMonth();
 	}
 
@@ -32,9 +32,9 @@ public class OurDate {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof OurDate)) 
+		if (!(obj instanceof XDate)) 
 			return false;
-		OurDate other = (OurDate) obj;
+		XDate other = (XDate) obj;
 		return other.date.equals(this.date);
 	}
 	

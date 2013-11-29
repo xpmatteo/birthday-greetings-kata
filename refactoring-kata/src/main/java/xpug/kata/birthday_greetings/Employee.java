@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 public class Employee {
 
-	private OurDate birthDate;
+	private XDate birthDate;
 	private String lastName;
 	private String firstName;
 	private String email;
@@ -12,11 +12,11 @@ public class Employee {
 	public Employee(String firstName, String lastName, String birthDate, String email) throws ParseException {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.birthDate = new OurDate(birthDate);
+		this.birthDate = new XDate(birthDate);
 		this.email = email;
 	}
 
-	public boolean isBirthday(OurDate today) {
+	public boolean isBirthday(XDate today) {
 		return today.isSameDay(birthDate);
 	}
 
