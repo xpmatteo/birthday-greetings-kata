@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-public class AcceptancePerWindowsTest {
+public class AcceptanceForWindowsTest {
 
 	private static final int SMTP_PORT = 25;
 	private List<Message> messagesSent;
