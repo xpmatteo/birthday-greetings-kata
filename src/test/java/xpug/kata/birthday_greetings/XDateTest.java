@@ -9,21 +9,21 @@ import org.junit.Test;
 public class XDateTest {
 	@Test
 	public void getters() throws Exception {
-		XDate xDate = new XDate("1789/01/24");
-		assertEquals(1, xDate.getMonth());
-		assertEquals(24, xDate.getDay());
+		XDate date = new XDate("1789/01/24");
+		assertEquals(1, date.getMonth());
+		assertEquals(24, date.getDay());
 	}
 
 	@Test
 	public void isSameDate() throws Exception {
-		XDate xDate = new XDate("1789/01/24");
+		XDate date = new XDate("1789/01/24");
 		XDate sameDay = new XDate("2001/01/24");
 		XDate notSameDay = new XDate("1789/01/25");
 		XDate notSameMonth = new XDate("1789/02/25");
 
-		assertTrue("same", xDate.isSameDay(sameDay));
-		assertFalse("not same day", xDate.isSameDay(notSameDay));
-		assertFalse("not same month", xDate.isSameDay(notSameMonth));
+		assertTrue("same", date.isSameDay(sameDay));
+		assertFalse("not same day", date.isSameDay(notSameDay));
+		assertFalse("not same month", date.isSameDay(notSameMonth));
 	}
 
 	@Test
