@@ -4,14 +4,11 @@ cd "$(dirname $0)/.."
 DEST=/tmp/birthday-greetings.zip
 
 rm $DEST 2> /dev/null || true
-mvn clean
+
 cd ..
-cp -rp refactoring-kata birthday-greetings
-zip -rq $DEST birthday-greetings
-rm -rf birthday-greetings
+zip -r $DEST birthday-greetings -x '*/lib*' -x '*.DS_Store*' -x '*target*' -x '*bin*' -x '*.git*'
 echo
 echo "See your distribution file here:"
 ls -l $DEST
-
 
 

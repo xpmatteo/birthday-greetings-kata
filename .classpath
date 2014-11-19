@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="src/lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="src/lib/mail-1.4.jar"/>
 	<classpathentry kind="lib" path="src/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="src/lib/dumbster1.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

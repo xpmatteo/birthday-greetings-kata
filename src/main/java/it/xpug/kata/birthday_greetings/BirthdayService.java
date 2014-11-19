@@ -1,4 +1,4 @@
-package xpug.kata.birthday_greetings;
+package it.xpug.kata.birthday_greetings;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -46,11 +46,6 @@ public class BirthdayService {
 		msg.setText(body);
 
 		// Send the message
-		sendMessage(msg);
-	}
-
-	// made protected for testing :-(
-	protected void sendMessage(Message msg) throws MessagingException {
 		Transport.send(msg);
 	}
 }
