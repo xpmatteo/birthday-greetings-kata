@@ -1,0 +1,9 @@
+bin
+target
+.idea
+out
+target
+
+vendor
+.phpunit.result.cache
+smtpmock

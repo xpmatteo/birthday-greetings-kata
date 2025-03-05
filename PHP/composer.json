@@ -1,0 +1,23 @@
+{
+    "name": "xpug/birthday-greetings-kata",
+    "description": "Birthday Greetings Kata in PHP",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "birthday_greetings\\": "src/birthday_greetings/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "birthday_greetings\\": "tests/birthday_greetings/"
+        }
+    }
+} 
