@@ -2,74 +2,50 @@ package birthday_greetings
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetDay(t *testing.T) {
 	date, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date: %v", err)
-	}
+	assert.NoError(t, err)
 
-	if date.GetDay() != 8 {
-		t.Errorf("Expected day to be 8, got %d", date.GetDay())
-	}
+	assert.Equal(t, 8, date.GetDay())
 }
 
 func TestGetMonth(t *testing.T) {
 	date, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date: %v", err)
-	}
+	assert.NoError(t, err)
 
-	if date.GetMonth() != 10 {
-		t.Errorf("Expected month to be 10, got %d", date.GetMonth())
-	}
+	assert.Equal(t, 10, date.GetMonth())
 }
 
 func TestIsSameDay(t *testing.T) {
 	date1, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date1: %v", err)
-	}
+	assert.NoError(t, err)
 
 	date2, err := NewXDateFromString("2007/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date2: %v", err)
-	}
+	assert.NoError(t, err)
 
-	if !date1.IsSameDay(date2) {
-		t.Errorf("Expected dates to be the same day")
-	}
+	assert.True(t, date1.IsSameDay(date2), "Expected dates to be the same day")
 }
 
 func TestIsNotSameDay_DifferentDay(t *testing.T) {
 	date1, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date1: %v", err)
-	}
+	assert.NoError(t, err)
 
 	date2, err := NewXDateFromString("2008/10/07")
-	if err != nil {
-		t.Fatalf("Failed to create date2: %v", err)
-	}
+	assert.NoError(t, err)
 
-	if date1.IsSameDay(date2) {
-		t.Errorf("Expected dates to be different days")
-	}
+	assert.False(t, date1.IsSameDay(date2), "Expected dates to be different days")
 }
 
 func TestIsNotSameDay_DifferentMonth(t *testing.T) {
 	date1, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date1: %v", err)
-	}
+	assert.NoError(t, err)
 
 	date2, err := NewXDateFromString("2008/11/08")
-	if err != nil {
-		t.Fatalf("Failed to create date2: %v", err)
-	}
+	assert.NoError(t, err)
 
-	if date1.IsSameDay(date2) {
-		t.Errorf("Expected dates to be different days due to different months")
-	}
+	assert.False(t, date1.IsSameDay(date2), "Expected dates to be different days due to different months")
 }

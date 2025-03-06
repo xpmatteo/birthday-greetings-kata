@@ -7,6 +7,7 @@ import (
 	"time"
 
 	smtpmock "github.com/mocktools/go-smtp-mock"
+	"github.com/stretchr/testify/assert"
 )
 
 const NONSTANDARD_PORT = 9999
@@ -17,95 +18,63 @@ Ann, Mary, 1975/03/11, mary.ann@foobar.com
 `
 
 func TestWillSendGreetings_WhenItsSomebodysBirthday(t *testing.T) {
-	// Arrange
+	// Start mock SMTP server
 	server := smtpmock.New(smtpmock.ConfigurationAttr{
 		PortNumber:        NONSTANDARD_PORT,
 		LogToStdout:       false,
 		LogServerActivity: false,
 	})
-	if err := server.Start(); err != nil {
-		t.Fatalf("Failed to start SMTP server: %v", err)
-	}
+	err := server.Start()
+	assert.NoError(t, err)
 	defer server.Stop()
-	birthdayService := NewBirthdayService()
+
+	// Arrange
 	createTestEmployeeDataFile(t)
+	birthdayService := NewBirthdayService()
 	date, err := NewXDateFromString("2008/10/08")
-	if err != nil {
-		t.Fatalf("Failed to create date: %v", err)
-	}
+	assert.NoError(t, err)
 
 	// Act
 	err = birthdayService.SendGreetings("employee_data.txt", date, "localhost", NONSTANDARD_PORT)
-	if err != nil {
-		t.Fatalf("Failed to send greetings: %v", err)
-	}
+	assert.NoError(t, err)
 
 	// Assert
-
-	// Wait a bit for the message to be processed
 	time.Sleep(100 * time.Millisecond)
-
-	// Check that a message was sent
-	if len(server.Messages()) != 1 {
-		t.Errorf("Expected 1 message to be sent, got %d", len(server.Messages()))
-	}
-
-	// Get the message and check its contents
 	messages := server.Messages()
-	if len(messages) != 1 {
-		t.Fatalf("Expected 1 message, got %d", len(messages))
-	}
+	assert.Len(t, messages, 1, "Expected exactly one message to be sent")
+
 	message := messages[0]
 	content := ExtractMessageContent(message.MsgRequest())
-	if content.Body != "Happy Birthday, dear John" {
-		t.Errorf("Expected message body to be 'Happy Birthday, dear John', got %s", message.MsgRequest())
-	}
-	if content.Subject != "Happy Birthday" {
-		t.Errorf("Expected subject to be 'Happy Birthday!', got %s", message.MsgRequest())
-	}
-	if content.Recipient != "john.doe@foobar.com" {
-		t.Errorf("Expected recipient to be 'john.doe@foobar.com', got %s", message.MsgRequest())
-	}
+	assert.Equal(t, "Happy Birthday, dear John", content.Body)
+	assert.Equal(t, "Happy Birthday", content.Subject)
+	assert.Equal(t, "john.doe@foobar.com", content.Recipient)
 }
 
 func TestWillNotSendEmailsWhenNobodysBirthday(t *testing.T) {
-	// Setup mock SMTP server
+	// Start mock SMTP server
 	server := smtpmock.New(smtpmock.ConfigurationAttr{
 		PortNumber:        NONSTANDARD_PORT,
 		LogToStdout:       false,
 		LogServerActivity: false,
 	})
-
-	if err := server.Start(); err != nil {
-		t.Fatalf("Failed to start SMTP server: %v", err)
-	}
+	err := server.Start()
+	assert.NoError(t, err)
 	defer server.Stop()
 
-	// Create a new BirthdayService
-	birthdayService := NewBirthdayService()
-
-	// Create test data file
+	// Arrange
 	createTestEmployeeDataFile(t)
-
-	// Create a date for testing
+	birthdayService := NewBirthdayService()
 	date, err := NewXDateFromString("2008/01/01")
-	if err != nil {
-		t.Fatalf("Failed to create date: %v", err)
-	}
+	assert.NoError(t, err)
 
-	// Send greetings
+	// Act
 	err = birthdayService.SendGreetings("employee_data.txt", date, "localhost", NONSTANDARD_PORT)
-	if err != nil {
-		t.Fatalf("Failed to send greetings: %v", err)
-	}
+	assert.NoError(t, err)
 
-	// Wait a bit for any messages to be processed
+	// Assert
 	time.Sleep(100 * time.Millisecond)
-
-	// Check that no messages were sent
-	if len(server.Messages()) != 0 {
-		t.Errorf("Expected 0 messages to be sent, got %d", len(server.Messages()))
-	}
+	messages := server.Messages()
+	assert.Empty(t, messages, "Expected no messages to be sent")
 }
 
 // Helper function to create the test employee data file
