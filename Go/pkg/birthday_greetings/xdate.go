@@ -42,12 +42,3 @@ func (x *XDate) GetMonth() int {
 func (x *XDate) IsSameDay(anotherDate *XDate) bool {
 	return anotherDate.GetDay() == x.GetDay() && anotherDate.GetMonth() == x.GetMonth()
 }
-
-// Equals checks if this date is equal to another date
-func (x *XDate) Equals(obj interface{}) bool {
-	other, ok := obj.(*XDate)
-	if !ok {
-		return false
-	}
-	return other.date.Equal(x.date)
-}

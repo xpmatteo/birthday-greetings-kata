@@ -46,37 +46,3 @@ func (e *Employee) GetFirstName() string {
 func (e *Employee) String() string {
 	return fmt.Sprintf("Employee %s %s <%s> born %v", e.firstName, e.lastName, e.email, e.birthDate)
 }
-
-// Equals checks if this employee is equal to another employee
-func (e *Employee) Equals(obj interface{}) bool {
-	other, ok := obj.(*Employee)
-	if !ok {
-		return false
-	}
-
-	// Check birthDate
-	if e.birthDate == nil {
-		if other.birthDate != nil {
-			return false
-		}
-	} else if !e.birthDate.Equals(other.birthDate) {
-		return false
-	}
-
-	// Check email
-	if e.email != other.email {
-		return false
-	}
-
-	// Check firstName
-	if e.firstName != other.firstName {
-		return false
-	}
-
-	// Check lastName
-	if e.lastName != other.lastName {
-		return false
-	}
-
-	return true
-}
