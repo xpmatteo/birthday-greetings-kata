@@ -21,9 +21,9 @@ class BirthdayService
             if (count($data) < 4) {
                 continue; // Skip invalid lines
             }
-            
+
             try {
-                $employee = new Employee($data[1], $data[0], trim($data[2]), $data[3]);
+                $employee = new Employee(trim($data[1]), trim($data[0]), trim($data[2]), trim($data[3]));
                 if ($employee->isBirthday($xDate)) {
                     $recipient = $employee->getEmail();
                     $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%');
@@ -65,4 +65,4 @@ class BirthdayService
             throw new \RuntimeException("Message could not be sent. Mailer Error: {$mail->ErrorInfo}", 0, $e);
         }
     }
-} 
+}
