@@ -11,3 +11,7 @@ Run all the tests.  One test will fail.  Change production code so that all test
 # How to continue
 
 Read the [blog post](http://matteo.vaccari.name/blog/archives/154) and/or the included presentation.
+
+# Update March 2025
+
+Added Go and PHP versions thanks to Cursor and Claude
