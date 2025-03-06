@@ -47,8 +47,7 @@ func (bs *BirthdayService) SendGreetings(fileName string, xDate *XDate, smtpHost
 		if employee.IsBirthday(xDate) {
 			recipient := employee.GetEmail()
 			body := strings.Replace("Happy Birthday, dear %NAME%", "%NAME%", employee.GetFirstName(), -1)
-			subject := "Happy Birthday!"
-
+			subject := "Happy Birthday"
 			err := bs.sendMessage(smtpHost, smtpPort, "sender@here.com", subject, body, recipient)
 			if err != nil {
 				return fmt.Errorf("failed to send message: %w", err)

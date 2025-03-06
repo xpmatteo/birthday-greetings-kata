@@ -46,7 +46,7 @@ func TestWillSendGreetings_WhenItsSomebodysBirthday(t *testing.T) {
 	message := messages[0]
 	content := ExtractMessageContent(message.MsgRequest())
 	assert.Equal(t, "Happy Birthday, dear John", content.Body)
-	assert.Equal(t, "Happy Birthday", content.Subject)
+	assert.Equal(t, "Happy Birthday!", content.Subject)
 	assert.Equal(t, "john.doe@foobar.com", content.Recipient)
 }
 
