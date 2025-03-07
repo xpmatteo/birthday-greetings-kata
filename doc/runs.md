@@ -13,5 +13,7 @@ Stages:
   40' Third stage (not completed by all)
   10' Discussion
 
-Notes: forgot to take a break.
 
+2025-03-06 Docebo
+
+~16 participants in three breakout rooms.  About 4 doing PHP and the others going with Go.  90' with 30' of presentation, 55' of practice and 5' retrospective.
