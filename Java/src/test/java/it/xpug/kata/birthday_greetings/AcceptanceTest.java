@@ -2,7 +2,6 @@ package it.xpug.kata.birthday_greetings;
 
 import org.junit.jupiter.api.*;
 
-// Import AssertJ for fluent assertions
 import static org.assertj.core.api.Assertions.*;
 
 import com.icegreen.greenmail.util.GreenMail;
@@ -32,7 +31,6 @@ public class AcceptanceTest {
 	public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
 		birthdayService.sendGreetings("employee_data.txt", new XDate("2008/10/08"), "localhost", NONSTANDARD_PORT);
 
-		// Fluent assertions with AssertJ
 		assertThat(mailServer.getReceivedMessages().length)
 			.as("message not sent?")
 			.isEqualTo(1);

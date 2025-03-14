@@ -1,10 +1,7 @@
 package it.xpug.kata.birthday_greetings;
 
-// Replace JUnit 4 imports with JUnit 5
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-
-// Import AssertJ for fluent assertions
 import static org.assertj.core.api.Assertions.*;
 
 public class EmployeeTest {

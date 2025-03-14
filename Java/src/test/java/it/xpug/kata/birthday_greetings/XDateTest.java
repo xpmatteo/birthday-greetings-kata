@@ -1,8 +1,6 @@
 package it.xpug.kata.birthday_greetings;
 
 import org.junit.jupiter.api.*;
-
-// Import AssertJ for fluent assertions
 import static org.assertj.core.api.Assertions.*;
 
 public class XDateTest {

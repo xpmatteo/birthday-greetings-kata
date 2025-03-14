@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-// Modern record using LocalDate instead of java.util.Date
 public record XDate(LocalDate date) {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
