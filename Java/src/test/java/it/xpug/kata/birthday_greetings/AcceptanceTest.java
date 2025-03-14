@@ -1,7 +1,9 @@
 package it.xpug.kata.birthday_greetings;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+
+// Import AssertJ for fluent assertions
+import static org.assertj.core.api.Assertions.*;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
@@ -30,18 +32,28 @@ public class AcceptanceTest {
 	public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
 		birthdayService.sendGreetings("employee_data.txt", new XDate("2008/10/08"), "localhost", NONSTANDARD_PORT);
 
-		assertEquals(1, mailServer.getReceivedMessages().length, "message not sent?");
+		// Fluent assertions with AssertJ
+		assertThat(mailServer.getReceivedMessages().length)
+			.as("message not sent?")
+			.isEqualTo(1);
+			
 		MimeMessage message = mailServer.getReceivedMessages()[0];
-		assertEquals("Happy Birthday, dear John!", GreenMailUtil.getBody(message));
-		assertEquals("Happy Birthday!", message.getSubject());
-		assertEquals(1, message.getAllRecipients().length);
-		assertEquals("john.doe@foobar.com", message.getAllRecipients()[0].toString());
+		assertThat(GreenMailUtil.getBody(message))
+			.isEqualTo("Happy Birthday, dear John!");
+		assertThat(message.getSubject())
+			.isEqualTo("Happy Birthday!");
+		assertThat(message.getAllRecipients())
+			.hasSize(1);
+		assertThat(message.getAllRecipients()[0].toString())
+			.isEqualTo("john.doe@foobar.com");
 	}
 
 	@Test
 	public void willNotSendEmailsWhenNobodysBirthday() throws Exception {
 		birthdayService.sendGreetings("employee_data.txt", new XDate("2008/01/01"), "localhost", NONSTANDARD_PORT);
 
-		assertEquals(0, mailServer.getReceivedMessages().length, "what? messages?");
+		assertThat(mailServer.getReceivedMessages().length)
+			.as("what? messages?")
+			.isZero();
 	}
 }
