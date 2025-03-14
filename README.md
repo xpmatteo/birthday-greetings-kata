@@ -30,4 +30,4 @@ Read the [blog post](http://matteo.vaccari.name/blog/archives/154) and/or the in
 
 # Update March 2025
 
-Added Go and PHP versions thanks to Cursor and Claude
+Added Go and PHP versions thanks to Cursor and Claude. Much-needed conversion of the Java version to Java 17.
