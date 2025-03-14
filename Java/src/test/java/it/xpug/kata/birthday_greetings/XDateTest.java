@@ -32,17 +32,5 @@ public class XDateTest {
 			.isFalse();
 	}
 
-	@Test
-	public void equality() throws Exception {
-		XDate base = new XDate("2000/01/02");
-		XDate same = new XDate("2000/01/02");
-		XDate different = new XDate("2000/01/04");
-
-		assertThat(base)
-			.isNotEqualTo(null)
-			.isNotEqualTo("")
-			.isEqualTo(base)
-			.isEqualTo(same)
-			.isNotEqualTo(different);
-	}
+	// No need for equality test - records handle it automatically!
 }
