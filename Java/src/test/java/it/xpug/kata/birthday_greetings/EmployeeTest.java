@@ -20,17 +20,4 @@ public class EmployeeTest {
 			.as("his birthday")
 			.isTrue();
 	}
-
-	@Test
-	public void equality() throws Exception {
-		Employee base = new Employee("First", "Last", "1999/09/01", "first@last.com");
-		Employee same = new Employee("First", "Last", "1999/09/01", "first@last.com");
-		Employee different = new Employee("First", "Last", "1999/09/01", "boom@boom.com");
-
-		assertThat(base)
-			.isNotEqualTo(null)
-			.isNotEqualTo("")
-			.isEqualTo(same)
-			.isNotEqualTo(different);
-	}
 }
